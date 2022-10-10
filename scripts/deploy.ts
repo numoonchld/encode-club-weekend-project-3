@@ -88,10 +88,43 @@ async function main() {
   })
 
   // - casting votes
+  console.log('\n')
+  console.log('...accountA is voting...')
+  const VOTE_TOKEN_AMOUNT = hardhatEthers.utils.parseEther('15')
+  const voteTxn = await tokenizedBallotContract
+    .connect(accountA)
+    .vote(1, VOTE_TOKEN_AMOUNT)
+  voteTxn.wait()
+
+  console.log(
+    'Proposal 1 voteCount:',
+    (await tokenizedBallotContract.proposals(0)).voteCount,
+  )
+  console.log(
+    'Proposal 2 voteCount:',
+    (await tokenizedBallotContract.proposals(1)).voteCount,
+  )
+  console.log(
+    'Proposal 3 voteCount:',
+    (await tokenizedBallotContract.proposals(2)).voteCount,
+  )
 
   // - checking vote power
+  console.log('\n')
+  console.log('...getting accountAs voting power...')
+  console.log(
+    'accountA voting power: ',
+    await tokenizedBallotContract.votingPower(accountA.address),
+  )
 
   // - querying results
+  console.log('\n')
+  console.log('...getting voting winner...')
+  console.log(
+    hardhatEthers.utils.parseBytes32String(
+      await tokenizedBallotContract.winnerName(),
+    ),
+  )
 }
 
 main().catch((error) => {
