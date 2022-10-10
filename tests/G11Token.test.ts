@@ -1,7 +1,8 @@
 import { expect } from 'chai'
+import { utils } from 'ethers'
 import { ethers } from 'hardhat'
 import { G11Token } from '../typechain-types'
-import { token } from '../typechain-types/@openzeppelin/contracts'
+import bigNumberDecimalToFloat from '../scripts/helpers/bigNumberDecimalToFloat'
 
 describe('G11Token', function () {
   let tokenContract: G11Token
@@ -19,13 +20,12 @@ describe('G11Token', function () {
     })
     it('total supply of tokens checks out', async () => {
       const totalTokenSupply = await tokenContract.totalSupply()
-
       const decimals = await tokenContract.decimals()
-      const totalTokenSupply_formatted = ethers.utils.formatUnits(
+
+      const tokenSupplyFloat = bigNumberDecimalToFloat(
         totalTokenSupply,
         decimals,
       )
-      const tokenSupplyFloat = parseFloat(totalTokenSupply_formatted)
 
       expect(tokenSupplyFloat).to.eq(1200)
     })
@@ -69,38 +69,139 @@ describe('G11Token', function () {
   })
 
   // give voting tokens
-  describe('', () => {
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
+  describe('token contract deployer gives voting tokens', () => {
+    it('to one account', async () => {
+      const TRANSFER_TOKEN_UNITS = 25
+      const [, account1] = await ethers.getSigners()
+
+      await tokenContract.transfer(account1.address, TRANSFER_TOKEN_UNITS)
+      expect(await tokenContract.balanceOf(account1.address)).to.eq(
+        TRANSFER_TOKEN_UNITS,
+      )
+    })
+
+    it('from one account to another', async () => {
+      throw new Error('Not implemented!')
+    })
   })
 
   // mint with minter to mint tokens
-  describe('', () => {
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
+  describe('account with minter role can mint tokens', () => {
+    it('deployer mints tokens', async () => {
+      const decimals = await tokenContract.decimals()
+      console.log(decimals)
+
+      const TOKEN_UNITS_TO_MINT = 50
+      console.log(TOKEN_UNITS_TO_MINT)
+
+      const [, , account2] = await ethers.getSigners()
+      const initialAccountTokenBalance = bigNumberDecimalToFloat(
+        await tokenContract.balanceOf(account2.address),
+        decimals,
+      )
+      console.log(initialAccountTokenBalance)
+
+      await tokenContract.mint(
+        account2.address,
+        ethers.utils.parseEther(`${TOKEN_UNITS_TO_MINT}`),
+      )
+
+      const finalAccountTokenBalance = bigNumberDecimalToFloat(
+        await tokenContract.balanceOf(account2.address),
+        decimals,
+      )
+      console.log(finalAccountTokenBalance)
+
+      expect(finalAccountTokenBalance).to.eq(
+        initialAccountTokenBalance + TOKEN_UNITS_TO_MINT,
+      )
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
   })
 
   // give roles
-  describe('', () => {
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
+  describe('give roles to accounts', () => {
+    it('give minter role to account 5', async () => {
+      const accounts = await ethers.getSigners()
+      const newMinterToBe = accounts[4]
+
+      // ethers keccak256: https://docs.ethers.io/v5/api/utils/hashing/
+      const MINTER_ROLE = ethers.utils.keccak256(
+        utils.toUtf8Bytes('MINTER_ROLE'),
+      )
+
+      expect(await tokenContract.hasRole(MINTER_ROLE, newMinterToBe.address)).to
+        .be.false
+      await tokenContract.grantRole(MINTER_ROLE, newMinterToBe.address)
+      expect(await tokenContract.hasRole(MINTER_ROLE, newMinterToBe.address)).to
+        .be.true
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
   })
 
   // delegating voting power
-  describe('', () => {
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
-    it('', async () => {})
+  describe('delegate voting power between accounts', () => {
+    it('self-delegation', async () => {
+      const accounts = await ethers.getSigners()
+      const accountA = accounts[3]
+
+      const accountADelegatesBefore = await tokenContract.delegates(
+        accountA.address,
+      )
+      expect(accountADelegatesBefore).to.eq(ethers.constants.AddressZero)
+
+      await tokenContract.connect(accountA).delegate(accountA.address)
+      const accountADelegatesAfter = await tokenContract.delegates(
+        accountA.address,
+      )
+      expect(accountADelegatesAfter).to.eq(accountA.address)
+    })
+    it('delegate voting power from one account to another', async () => {
+      const accounts = await ethers.getSigners()
+      const accountA = accounts[3]
+      const accountB = accounts[4]
+
+      const accountADelegatesBefore = await tokenContract.delegates(
+        accountA.address,
+      )
+      expect(accountADelegatesBefore).to.eq(ethers.constants.AddressZero)
+
+      await tokenContract.connect(accountA).delegate(accountB.address)
+      const accountADelegatesAfter = await tokenContract.delegates(
+        accountA.address,
+      )
+      expect(accountADelegatesAfter).to.eq(accountB.address)
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
+    it('', async () => {
+      throw new Error('Not implemented!')
+    })
   })
 })
