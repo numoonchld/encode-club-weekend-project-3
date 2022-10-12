@@ -2,7 +2,7 @@ import ethers from 'ethers'
 import { ethers as hardhatEthers } from 'hardhat'
 import convertStringArrayToBytes32 from './helpers/convertStringArrayToBytes32'
 
-import PROPOSALS from '../scripts/data/ballotProposals'
+import PROPOSALS from './data/ballotProposals'
 
 async function main() {
   const [
