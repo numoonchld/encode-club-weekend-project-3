@@ -68,7 +68,7 @@ async function main() {
         // deploy tokenized-ballot contract
         console.log('\n')
         console.log(
-          'Attempt Tokenized Ballot Contract Deployment: ===============================',
+          'Attempt Tokenized-Ballot Contract Deployment: ===============================',
         )
         const tokenizedBallotContractFactory = new TokenizedBallot__factory(
           signer,
@@ -83,7 +83,7 @@ async function main() {
 
         console.log('\n')
         console.log(
-          'Success ✅ \n G11Token deployment address: ',
+          'Success ✅ \n Tokenized-Ballot deployment address: ',
           tokenizedBallotContract.address,
         )
       }
