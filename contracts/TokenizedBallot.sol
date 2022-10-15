@@ -48,7 +48,7 @@ contract TokenizedBallot {
     // proposals to varying degrees if so desired
     function vote(uint256 proposal, uint256 amount) public {
         uint256 votingPower_ = votingPower(msg.sender);
-        require(votingPower_ <= amount, "Not enough voting power!");
+        require(votingPower_ >= amount, "Not enough voting power!");
         votingPowerSpent[msg.sender] += amount;
         proposals[proposal].voteCount += amount;
     }
@@ -59,9 +59,10 @@ contract TokenizedBallot {
         view
         returns (uint256 votingPower_)
     {
+        // pastVotingSinceReferenceBlock = tokenContract.getPastVotes(account, referenceBlock);
         votingPower_ =
-            votingPowerSpent[account] -
-            tokenContract.getPastVotes(account, referenceBlock);
+            tokenContract.getPastVotes(account, referenceBlock) -
+            votingPowerSpent[account];
     }
 
     // retrieve winnerName
