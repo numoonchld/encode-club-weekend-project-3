@@ -79,10 +79,6 @@ describe('G11Token', function () {
         TRANSFER_TOKEN_UNITS,
       )
     })
-
-    it('from one account to another', async () => {
-      throw new Error('Not implemented!')
-    })
   })
 
   // mint with minter to mint tokens
@@ -92,7 +88,6 @@ describe('G11Token', function () {
       console.log(decimals)
 
       const TOKEN_UNITS_TO_MINT = 50
-      console.log(TOKEN_UNITS_TO_MINT)
 
       const [, , account2] = await ethers.getSigners()
       const initialAccountTokenBalance = bigNumberDecimalToFloat(
@@ -110,23 +105,10 @@ describe('G11Token', function () {
         await tokenContract.balanceOf(account2.address),
         decimals,
       )
-      console.log(finalAccountTokenBalance)
 
       expect(finalAccountTokenBalance).to.eq(
         initialAccountTokenBalance + TOKEN_UNITS_TO_MINT,
       )
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
     })
   })
 
@@ -146,18 +128,6 @@ describe('G11Token', function () {
       await tokenContract.grantRole(MINTER_ROLE, newMinterToBe.address)
       expect(await tokenContract.hasRole(MINTER_ROLE, newMinterToBe.address)).to
         .be.true
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
     })
   })
 
@@ -193,15 +163,6 @@ describe('G11Token', function () {
         accountA.address,
       )
       expect(accountADelegatesAfter).to.eq(accountB.address)
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
-    })
-    it('', async () => {
-      throw new Error('Not implemented!')
     })
   })
 })
