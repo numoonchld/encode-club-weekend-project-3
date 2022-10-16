@@ -1,8 +1,6 @@
 import { ethers } from 'ethers'
 import { ethers as hardhatEthers } from 'hardhat'
 
-import PROPOSALS from './data/ballotProposals'
-
 async function main() {
   console.log(
     'Running Local Network Connect and Deploy! =====================================',
@@ -21,8 +19,6 @@ async function main() {
   const newMinter = accounts[7]
   const deployer = accounts[0]
   const voterA = accounts[1]
-  // const voterB = accounts[2]
-  // const voterC = accounts[3]
 
   const MINTER_ROLE = 'MINTER_ROLE'
   const MINTER_ROLE_KECCAK = ethers.utils.keccak256(
