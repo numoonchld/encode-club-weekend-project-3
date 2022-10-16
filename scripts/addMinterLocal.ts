@@ -27,10 +27,22 @@ async function main() {
 
   // assign newMinter role to non-deployer account
   console.log('\n')
+  console.log('...get current roles for newMinter, a non-deployer account...')
+  console.log(
+    await tokenContract.hasRole(MINTER_ROLE_KECCAK, newMinter.address),
+  )
+
+  console.log('\n')
   console.log('...assign newMinter role to non-deployer account...')
   await tokenContract
     .connect(deployer)
     .grantRole(MINTER_ROLE_KECCAK, newMinter.address)
+
+  console.log('\n')
+  console.log('...get current roles for newMinter, a non-deployer account...')
+  console.log(
+    await tokenContract.hasRole(MINTER_ROLE_KECCAK, newMinter.address),
+  )
 
   // validate minting abilities of newMinter
   console.log('\n')
